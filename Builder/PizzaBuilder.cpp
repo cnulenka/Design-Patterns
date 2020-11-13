@@ -112,7 +112,7 @@ private:
     PizzaBuilder* m_pizzaBuilder;
 };
 
-/* client code*/
+/* client code, used to create and open pizza */
 int main()
 {
     Cook cook;
@@ -125,6 +125,7 @@ int main()
     cook.makePizza(&spicy_pizza_builder);
     cook.openPizza();
 
+    /* press enter to close the cmd */
     std::cin.get();
     return 0;
 }
