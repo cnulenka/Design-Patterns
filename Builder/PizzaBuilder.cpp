@@ -22,7 +22,7 @@ public:
     void open() const
     {
         cout << "Pizza with " << m_dough << " dough, " << m_sauce << " sauce and "
-            << m_topping << " topping. Mmm.\n";
+            << m_topping << " topping is ready. Mmm.\n";
     }
 private:
     string m_dough;
@@ -55,6 +55,7 @@ protected:
 /* Concrete Builder 1 */
 class HawaiianPizzaBuilder: public PizzaBuilder
 {
+public:
     virtual ~HawaiianPizzaBuilder() {};
     virtual void buildDough()
     {
@@ -73,6 +74,7 @@ class HawaiianPizzaBuilder: public PizzaBuilder
 /* Concrete Builder 2 */
 class SpicyPizzaBuilder : public PizzaBuilder
 {
+public:
     virtual ~SpicyPizzaBuilder() {};
     virtual void buildDough()
     {
@@ -88,9 +90,41 @@ class SpicyPizzaBuilder : public PizzaBuilder
     }
 };
 
+/*Director class*/
+class Cook
+{
+public:
+    void openPizza()
+    {
+        m_pizzaBuilder->getPizza()->open();
+    }
+    /* Pizza contruction takesplace as per the builder type*/
+    void makePizza(PizzaBuilder* pb)
+    {
+        m_pizzaBuilder = pb;
+        m_pizzaBuilder->createNewPizzaProduct();
+        m_pizzaBuilder->buildDough();
+        m_pizzaBuilder->buildSauce();
+        m_pizzaBuilder->buildTopping();
+    }
+private:
+    /* parent class pointer can store any child class object */
+    PizzaBuilder* m_pizzaBuilder;
+};
+
+/* client code*/
 int main()
 {
-    std::cout << "let's start!";
+    Cook cook;
+    HawaiianPizzaBuilder hawaiian_pizza_builder;
+    SpicyPizzaBuilder    spicy_pizza_builder;
+
+    cook.makePizza(&hawaiian_pizza_builder);
+    cook.openPizza();
+
+    cook.makePizza(&spicy_pizza_builder);
+    cook.openPizza();
+
     std::cin.get();
     return 0;
 }
